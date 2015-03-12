@@ -16,18 +16,21 @@ public class AnswerPanel extends JPanel
 	private JTextField answerField;
 	private JScrollPane answerPane;
 	private JTextArea answerArea;
-	private JLabel answerLabel;
+	
 	
 	
 	public AnswerPanel(AnswerAppController baseController)
 	{
 		baseLayout = new SpringLayout();
 		submitButton = new JButton("Submit");
-		answerLabel = new JLabel("");
-		titleLabel = new JLabel("");
+		
+		titleLabel = new JLabel("Welcome!");
+		
+		
 		answerField = new JTextField(25);
-		answerArea = new JTextArea(5, 25);
-		answerPane = new JScrollPane(answerArea);
+		
+		
+		answerPane = new JScrollPane();
 		
 		
 		
@@ -52,11 +55,25 @@ public class AnswerPanel extends JPanel
 		this.add(submitButton);
 		this.add(answerPane);
 		this.add(answerField);
-		this.add(answerLabel);
+		answerArea = new JTextArea(5, 25);
+		
+		add(answerArea);
 	}
 	
 	private void setupLayout()
 	{
+		baseLayout.putConstraint(SpringLayout.NORTH, submitButton, 21, SpringLayout.SOUTH, answerField);
+		baseLayout.putConstraint(SpringLayout.EAST, answerField, -98, SpringLayout.EAST, this);
+		baseLayout.putConstraint(SpringLayout.EAST, submitButton, -197, SpringLayout.EAST, this);
+		baseLayout.putConstraint(SpringLayout.EAST, titleLabel, -210, SpringLayout.EAST, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, titleLabel, -13, SpringLayout.NORTH, answerArea);
+		baseLayout.putConstraint(SpringLayout.NORTH, answerField, 20, SpringLayout.SOUTH, answerArea);
+		baseLayout.putConstraint(SpringLayout.NORTH, answerArea, 83, SpringLayout.NORTH, this);
+		baseLayout.putConstraint(SpringLayout.WEST, answerArea, 137, SpringLayout.WEST, this);
+		baseLayout.putConstraint(SpringLayout.SOUTH, answerArea, -155, SpringLayout.SOUTH, this);
+		baseLayout.putConstraint(SpringLayout.EAST, answerArea, -116, SpringLayout.EAST, this);
+		
+		
 		
 	}
 	
@@ -66,9 +83,18 @@ public class AnswerPanel extends JPanel
 		{
 			public void actionPerformed(ActionEvent click)
 			{
-				
+				String userTypedText = answerField.getText();
+				String answerResponse = baseController.sendTextToAnswerBot(userTypedText);
+				displayTextToUser(userTypedText);
+				displayTextToUser(answerResponse);
+				answerField.setText("");
 			}
 		});
+	}
+	
+	public void displayTextToUser(String input)
+	{
+		answerArea.append("\n" + " " + input);
 	}
 
 }
